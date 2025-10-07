@@ -38,8 +38,8 @@ def main() -> None:
                     wav_out.writeframes(chunk)
                     break
 
-                processed = audio_processor.Process10ms(chunk)
-                wav_out.writeframes(processed.audio)
+                processed = audio_processor.process_10ms(chunk)
+                wav_out.writeframes(processed)
                 chunk = wav_in.readframes(SAMPLES_10MS)
 
 

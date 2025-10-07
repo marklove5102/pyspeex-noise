@@ -1,42 +1,45 @@
 from pathlib import Path
 
 # Available at setup time due to pyproject.toml
-from pybind11.setup_helpers import Pybind11Extension, build_ext
-from setuptools import setup
+from setuptools import setup, Extension
 
 _DIR = Path(__file__).parent
 _SPEEX_DIR = _DIR / "speex"
 
-__version__ = "1.0.2"
+version = "2.0.0"
 
 flags = ["-DFLOATING_POINT", "-DUSE_KISS_FFT"]
 sources = list(_SPEEX_DIR.glob("*.cc"))
 
-
 ext_modules = [
-    Pybind11Extension(
+    Extension(
         name="speex_noise_cpp",
         language="c++",
-        cxx_std=17,
-        sources=[str(p) for p in sources] + [str(_DIR / "python.cpp")],
+        py_limited_api=True,
         extra_compile_args=flags,
-        define_macros=[("VERSION_INFO", __version__)],
+        sources=sorted(
+            [str(p) for p in sources] + [str(_DIR / "src" / "speex_noise.cpp")]
+        ),
+        define_macros=[
+            ("Py_LIMITED_API", "0x03090000"),
+            ("VERSION_INFO", f'"{version}"'),
+        ],
         include_dirs=[str(_SPEEX_DIR)],
     ),
 ]
 
-
 setup(
-    name="pyspeex_noise",
-    version=__version__,
-    author="Michael Hansen",
-    author_email="mike@rhasspy.org",
-    url="https://github.com/rhasspy/pyspeex-noise",
-    description="Noise suppression and automatic gain with speex",
-    long_description="",
-    packages=["pyspeex_noise"],
+    version=version,
     ext_modules=ext_modules,
-    zip_safe=False,
-    python_requires=">=3.7",
-    classifiers=["License :: OSI Approved :: MIT License"],
+    extras_require={
+        "dev": [
+            "black",
+            "flake8",
+            "isort",
+            "mypy",
+            "pylint",
+            "pytest",
+            "build",
+        ]
+    },
 )

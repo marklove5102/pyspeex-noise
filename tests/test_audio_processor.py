@@ -27,8 +27,8 @@ def test_no_processing():
     """Test that audio is not changed if no auto gain or noise suppression is applied."""
     audio_processor = AudioProcessor(0, 0)
     data_in = bytes(320)
-    result = audio_processor.Process10ms(data_in)
-    assert result.audio == data_in
+    result = audio_processor.process_10ms(data_in)
+    assert result == data_in
 
 
 def test_noise_suppression():
@@ -44,7 +44,7 @@ def test_noise_suppression():
 
         chunk = wav_file.readframes(SAMPLES_10MS)
         while len(chunk) == BYTES_10MS:
-            clean_chunk = audio_processor.Process10ms(chunk).audio
+            clean_chunk = audio_processor.process_10ms(chunk)
             noisy_energy.append(_get_energy(chunk))
             clean_energy.append(_get_energy(clean_chunk))
             chunk = wav_file.readframes(SAMPLES_10MS)

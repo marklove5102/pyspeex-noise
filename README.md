@@ -10,7 +10,7 @@ noise_suppression = -30
 audio_processor = AudioProcessor(auto_gain, noise_suppression)
 
 # Process 10ms chunks of 16-bit mono PCM @16Khz
-while audio := get_10ms_of_audio():
+while audio := get_10ms_of_audio():  # you define this
     assert len(audio) == 160 * 2  # 160 samples
-    clean_audio = audio_processor.Process10ms(audio).audio
+    clean_audio = audio_processor.process_10ms(audio)
 ```

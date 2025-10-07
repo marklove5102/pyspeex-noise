@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.0
+
+- Change `Process10ms` to `process_10ms`
+- `process_10ms` returns audio bytes directly
+- Remove pybind11
+- Use stable ABI
+
 ## 1.0.2
 
 - Rename .c files to .cc so clang will work
